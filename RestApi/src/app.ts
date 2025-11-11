@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { userController } from './controllers/userController';
 import { dbConnect } from './configs/db';
+import { productController } from './controllers/productController';
 
 // .env configuration file loading
 dotenv.config();
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 app.use('/api/v1/users', userController);
+app.use('/api/v1/products', productController);
 
 
 // Start the server

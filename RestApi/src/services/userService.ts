@@ -17,7 +17,7 @@ export const register = async (user: IUser) => {
     }
 }
 
-export const login = async (user: IUser) => { 
+export const login = async (user: IUser) => {
     const userFind = await UserDB.findOne({email: user.email})
     if (!userFind) {
         return jsonResult(404, false, 'Kullanıcı bulunamadı', null);
