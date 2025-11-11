@@ -1,9 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import { userController } from './controllers/userController';
 import { dbConnect } from './configs/db';
+
+// import controllers
+import { userController } from './controllers/userController';
 import { productController } from './controllers/productController';
+import { categoryController } from './controllers/categoryController';
+import { globalException } from './configs/globalException';
 
 // .env configuration file loading
 dotenv.config();
@@ -19,7 +23,9 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/users', userController);
 app.use('/api/v1/products', productController);
+app.use('/api/v1/categories', categoryController);
 
+app.use(globalException);
 
 // Start the server
 app.listen(PORT, () => {

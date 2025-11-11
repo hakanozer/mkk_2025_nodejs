@@ -5,7 +5,7 @@ export interface IProduct extends Document {
     description?: string,
     price: number,
     inStock: boolean,
-    categories: string[],
+    categories: mongoose.Types.ObjectId[],
     dateAdded?: Date,
     authorId: mongoose.Types.ObjectId
 }
@@ -15,7 +15,7 @@ const ProductSchema = new mongoose.Schema({
     description: {type: String},
     price: {type: Number, required: true, min: 0},
     inStock: {type: Boolean, required: true, default: true},
-    categories: {type: [String], required: true, default: []},
+    categories: {type: [mongoose.Schema.Types.ObjectId], ref: 'Category', required: true, default: []},
     dateAdded: {
         type: Date,
         default: () => {
