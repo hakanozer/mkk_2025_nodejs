@@ -1,21 +1,33 @@
 import React, { FormEvent, useState } from 'react'
 import { userLogin } from '../services/userService'
 import apiConfig from '../services/apiConfig'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
 
-  const [email, setemail] = useState('')
-  const [password, setPassword] = useState('')  
+  const navigate = useNavigate()  
+
+  const [email, setemail] = useState('zehra@mail.com')
+  const [password, setPassword] = useState('123456')  
 
   const loginFunc = (evt: FormEvent) => {
     evt.preventDefault()
-    userLogin(email, password).then(res => {
-        const dt = res.data
-        localStorage.setItem('jwt', dt.data.jwt)
-        apiConfig.defaults.headers.common['Authorization'] = `Bearer ${dt.data.jwt}`;
-    }).catch(err => {
-        alert('username or password fail')
-    })
+    if (email === '') {
+        alert('email empty')
+        
+    } else if (password === '') {
+        alert('password empty')
+        
+    }else {
+        userLogin(email, password).then(res => {
+            const dt = res.data
+            localStorage.setItem('jwt', dt.data.jwt)
+            apiConfig.defaults.headers.common['Authorization'] = `Bearer ${dt.data.jwt}`;
+            navigate('/products');
+        }).catch(err => {
+            alert('username or password fail')
+        })
+    }
   }
 
   return (
