@@ -10,7 +10,10 @@ userController.get('/', (req: Request, res: Response) => {
 userController.post('/userLogin', async (req: Request, res: Response) => { 
     const email = req.body.email
     const password = req.body.password
-    const validUser = await userLogin(email, password)
-    console.log(validUser)
+    const dbUser = await userLogin(email, password)
+    if (dbUser) {
+        req.session.item = dbUser
+        res.redirect('/dashboard')
+    }
     res.redirect('/')
 })

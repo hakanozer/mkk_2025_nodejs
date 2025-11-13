@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <%- include('template/bootstrap') %>
+</head>
+<body>
+    <div class="container">
+        <%- include('template/navbar') %>
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Product Add</h3>
+                <form action="/productAdd" method="post">
+                    <div class="mb-3">
+                        <input name="name" class="form-control" placeholder="Name" />
+                    </div>
+                    <div class="mb-3">
+                        <input name="description" class="form-control" placeholder="Description" />
+                    </div>
+                    <div class="mb-3">
+                        <input name="price" class="form-control" placeholder="Price" />
+                    </div>
+                    <div class="mb-3">
+                        <select name="categories" class="form-select" aria-label="Default select example">
+                            <% categories.forEach(item => { %>
+                             <option value="<%= item.id %>"><%= item.title %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <button class="btn btn-success">Add</button>
+                </form>
+            </div>
+            <div class="col-sm-6">
+                <h3>Product List</h3>
+                <div class="row">
+                <% products.forEach(item => { %>
+                    <div class="card col-sm-4">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= item.name %></h5>
+                            <p class="card-text"><%= item.description %></p>
+                            <p class="card-text"><%= item.price %></p>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </div>
+                <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
