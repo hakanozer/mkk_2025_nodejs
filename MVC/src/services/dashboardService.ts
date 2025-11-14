@@ -16,3 +16,7 @@ export const allProducts = async () => {
     const products = await ProductDB.find().populate('categories').populate('authorId');
     return products;
 }
+
+export const deleteProductById = async (id: string) => {
+    await ProductDB.findByIdAndDelete(id);
+}

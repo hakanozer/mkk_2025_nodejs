@@ -5,6 +5,8 @@ import bodyParser from 'body-parser'
 import { connectDB } from './utils/db'
 import { IUser } from './models/userModel'
 import dotenv from 'dotenv'
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 
 // .env Config - .env file loading
@@ -12,6 +14,8 @@ dotenv.config({path: path.resolve(__dirname, '../.env')});
 
 const app = express()
 const PORT = process.env.PORT || 3000
+const server = createServer(app);
+const io = new Server(server);
 
 // Session Config
 declare module 'express-session' {
@@ -20,11 +24,25 @@ declare module 'express-session' {
   }
 }
 const sessionConfig = session({
-  secret: 'key123',
-  resave: false,
-  saveUninitialized: true
+    secret: '1234',
+    resave: false,
+    saveUninitialized: true,
+    /*
+    cookie: {
+        httpOnly: true,
+        secure: true,        // HTTPS zorunlu
+        sameSite: "strict",  // CSRF için çok önemli
+        maxAge: 1000 * 60 * 30 // 30 dakika
+    }
+    */
 })
 app.use(sessionConfig)
+// Socket.IO ile session paylaşımı
+io.engine.use((req: any, res: any, next: any) => {
+  sessionConfig(req, res, next);
+});
+
+
 
 // DB Config
 connectDB()

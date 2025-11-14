@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express'
 import { Types } from 'mongoose';
-import { addProduct, allCategories, allProducts } from '../services/dashboardService';
+import { addProduct, allCategories, allProducts, deleteProductById } from '../services/dashboardService';
 import { IProduct } from '../models/productModel';
 
 export const dashboardController = express.Router()
@@ -17,5 +17,11 @@ dashboardController.post('/productAdd', async (req: Request, res: Response) => {
     // ensure the session id is treated as a mongoose ObjectId
     product.authorId = new Types.ObjectId(String(req.session.item._id));
     await addProduct(product);
+    res.redirect('/dashboard');
+})
+
+dashboardController.get('/productDetele', async (req: Request, res: Response) => { 
+    const id = String(req.query.id);
+    await deleteProductById(id);
     res.redirect('/dashboard');
 })

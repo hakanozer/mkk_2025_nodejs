@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <%- include('template/bootstrap') %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/socket.js"></script>
 </head>
 <body>
     <div class="container">
         <%- include('template/navbar') %>
-        <h2>Welcome Profile</h2>
+        <h2>User Chat</h2>
+        <div id="chatMessages">
+            <h5>Ali Bil<small class="text-body-secondary">Merhaba</small></h5>
+        </div>
+        <form id="chatForm">
+            <div class="mb-3">
+                <div class="d-flex" style="position: absolute; bottom: 40px; width: 80%;">
+                    <input id="chatText" class="form-control" style="margin-right: 10px;" />
+                    <button id="chatSendBtn" class="btn btn-success">Send</button>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 </html>

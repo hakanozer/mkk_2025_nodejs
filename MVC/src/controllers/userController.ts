@@ -8,12 +8,23 @@ userController.get('/', (req: Request, res: Response) => {
 })
 
 userController.post('/userLogin', async (req: Request, res: Response) => { 
-    const email = req.body.email
-    const password = req.body.password
-    const dbUser = await userLogin(email, password)
+    const email = req.body.email;
+    const password = req.body.password;
+    const dbUser = await userLogin(email, password);
     if (dbUser) {
-        req.session.item = dbUser
-        res.redirect('/dashboard')
+        return req.session.regenerate((err) => {
+            if (err) return res.redirect('/');
+
+            req.session.item = dbUser;
+            return res.redirect('/dashboard');
+        });
     }
-    res.redirect('/')
+    return res.redirect('/');
+});
+
+
+userController.get('/logout', (req: Request, res: Response) => { 
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
 })
