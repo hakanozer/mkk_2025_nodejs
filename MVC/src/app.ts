@@ -12,10 +12,13 @@ import { Server } from "socket.io";
 // .env Config - .env file loading
 dotenv.config({path: path.resolve(__dirname, '../.env')});
 
+
 const app = express()
 const PORT = process.env.PORT || 3000
 const server = createServer(app);
 const io = new Server(server);
+app.use(express.static(path.join(__dirname, "js")));
+
 
 // Session Config
 declare module 'express-session' {
@@ -41,7 +44,6 @@ app.use(sessionConfig)
 io.engine.use((req: any, res: any, next: any) => {
   sessionConfig(req, res, next);
 });
-
 
 
 // DB Config
@@ -70,8 +72,28 @@ app.use(userController)
 app.use(sessionControl, dashboardController)
 app.use(sessionControl, profileController)
 
+// Socket.IO Connection
+io.on("connection", (socket) => {
+  // session control
+  const req = socket.request as express.Request;
+  if (!req.session.item) {
+    console.log("unauthorized user tried to connect via socket");
+    socket.disconnect();
+    return;
+  }
 
-app.listen(PORT, () => {
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  socket.on("chat message", (msg:string) => {
+    io.emit("chat message", { user: req.session.item.name, message: msg });
+  });
+
+});
+
+
+server.listen(PORT, () => {
   console.log(`Server running: http://localhost:${PORT}`)
 })
 

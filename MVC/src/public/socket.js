@@ -7,6 +7,14 @@ $(document).ready(() => {
     chatForm.submit( function (evt) {
         evt.preventDefault()
         const sendText = chatText.val()
-        alert(sendText)
+        socket.emit('chat message', sendText)
+        chatText.val('')
+        return false;
+    })
+
+    socket.on('chat message', function(msg) {
+        const newMessage = `<h5>${msg.user}: <small class="text-body-secondary">${msg.message}</small></h5>`
+        chatMessages.append(newMessage)
+        chatMessages.scrollTop(chatMessages[0].scrollHeight);
     })
 })
